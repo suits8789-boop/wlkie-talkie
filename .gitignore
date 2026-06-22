@@ -1,7 +1,7 @@
-node_modules/
-certs/
-android/
-capacitor.config.json
+/node_modules/
+/certs/
+/android/
+/capacitor.config.json
 
 # Ignore build artifacts from flutter
 walkie_talkie_flutter/build/

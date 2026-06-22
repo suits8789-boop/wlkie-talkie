@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'sound_effects.dart';
 import 'webrtc_client.dart';
 
@@ -78,10 +79,26 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     'Titan', 'Hunter', 'Echo', 'Apex', 'Razor', 'Cobra'
   ];
 
+  Future<void> _initBackground() async {
+    try {
+      const androidConfig = FlutterBackgroundAndroidConfig(
+        notificationTitle: "WifiTalkie Active",
+        notificationText: "Connected to walkie-talkie channel",
+        notificationImportance: AndroidNotificationImportance.normal,
+        notificationIcon: AndroidResource(name: 'ic_launcher', defType: 'mipmap'),
+      );
+      bool success = await FlutterBackground.initialize(androidConfig: androidConfig);
+      _client.onLog?.call("Background service initialized: $success", "system");
+    } catch (e) {
+      _client.onLog?.call("Failed to initialize background service: $e", "error");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _generateRandomUsername();
+    _initBackground();
     
     _waveController = AnimationController(
       vsync: this,
@@ -171,6 +188,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         roomName: room,
       );
 
+      try {
+        if (await FlutterBackground.hasPermissions) {
+          await FlutterBackground.enableBackgroundExecution();
+          _client.onLog?.call("Background execution enabled.", "system");
+        }
+      } catch (bgError) {
+        _client.onLog?.call("Could not enable background execution: $bgError", "error");
+      }
+
       setState(() {
         _isConnected = true;
         _isLoading = false;
@@ -196,6 +222,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   }
 
   void _disconnect() {
+    try {
+      if (FlutterBackground.isBackgroundExecutionEnabled) {
+        FlutterBackground.disableBackgroundExecution();
+      }
+    } catch (bgError) {
+      _client.onLog?.call("Could not disable background execution: $bgError", "error");
+    }
+
     _client.disconnect();
     setState(() {
       _isConnected = false;
