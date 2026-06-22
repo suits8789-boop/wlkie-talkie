@@ -1,0 +1,19 @@
+{
+  "name": "wifi-walkie-talkie",
+  "version": "1.0.0",
+  "description": "Local Wi-Fi Walkie-Talkie Web Application using WebRTC and Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "express": "^4.19.2",
+    "selfsigned": "^2.4.1",
+    "socket.io": "^4.7.5"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

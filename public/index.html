@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Wi-Fi Walkie Talkie - Real-time Voice Channel</title>
+  <!-- Orbitron and Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stars-overlay"></div>
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <main class="app-container">
+    <!-- 1. JOIN CHANNEL SCREEN (LOBBY) -->
+    <section id="join-screen" class="glass-card">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+            <line x1="12" x2="12" y1="19" y2="22"/>
+          </svg>
+        </div>
+        <h1 class="logo-text">WIFI TALKIE</h1>
+        <p class="subtitle">Secure Real-time Local Voice Mesh</p>
+      </div>
+
+      <!-- SSL / Wi-Fi Access Warning (Extremely Important!) -->
+      <div class="ssl-warning-box">
+        <div class="warning-title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" x2="12" y1="9" y2="13"/>
+            <line x1="12" x2="12.01" y1="17" y2="17"/>
+          </svg>
+          HTTPS Warning (For Mobile/Wi-Fi devices)
+        </div>
+        <p class="warning-desc">
+          When opening this app on another device via the Wi-Fi IP address, your browser will show an <strong>"Untrusted Certificate" warning</strong>. This is because we generate a local SSL certificate.
+        </p>
+        <p class="warning-desc font-bold">
+          👉 You MUST click "Advanced" and then "Proceed" / "Accept Risk" to allow microphone access.
+        </p>
+      </div>
+
+      <form id="join-form">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <div class="input-with-button">
+            <input type="text" id="username" placeholder="Enter username..." maxlength="15" autocomplete="off" required>
+            <button type="button" id="randomize-btn" title="Randomize name">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="room-name">Channel / Room</label>
+          <input type="text" id="room-name" value="General" placeholder="Enter channel name..." maxlength="20" autocomplete="off" required>
+        </div>
+
+        <button type="submit" id="join-btn" class="primary-btn">
+          <span>CONNECT CHANNEL</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+    </section>
+
+    <!-- 2. WALKIE-TALKIE SCREEN -->
+    <section id="walkie-talkie-screen" class="glass-card hidden">
+      <!-- Top Status Header -->
+      <header class="channel-header">
+        <button id="leave-btn" class="icon-btn-secondary" title="Disconnect channel">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+          <span>Exit</span>
+        </button>
+        <div class="channel-info">
+          <span class="channel-label">CHANNEL</span>
+          <span id="display-room" class="channel-value">GENERAL</span>
+        </div>
+        <div class="user-status-badge">
+          <span id="display-username">Spectre-1</span>
+          <span class="badge-dot pulse-green"></span>
+        </div>
+      </header>
+
+      <div class="main-layout">
+        <!-- Panel 1: Handheld Device Mockup -->
+        <div class="device-section">
+          <!-- The Retro LCD Display -->
+          <div class="lcd-display">
+            <div class="lcd-grid"></div>
+            <div class="lcd-header">
+              <span id="lcd-rx-tx" class="lcd-txt blink-red">RX</span>
+              <span class="lcd-txt font-digital">CH-01</span>
+              <span class="lcd-signal">
+                <span class="sig-bar bar-1 active"></span>
+                <span class="sig-bar bar-2 active"></span>
+                <span class="sig-bar bar-3 active"></span>
+                <span class="sig-bar bar-4"></span>
+                <span class="sig-bar bar-5"></span>
+              </span>
+            </div>
+            <div class="lcd-main">
+              <div id="lcd-status" class="lcd-status-msg">STANDBY</div>
+              <div id="lcd-substatus" class="lcd-sub-msg">READY TO RECEIVE</div>
+            </div>
+            <!-- Canvas Visualizer for Audio Wave -->
+            <div class="lcd-visualizer-container">
+              <canvas id="wave-canvas" width="300" height="40"></canvas>
+            </div>
+          </div>
+
+          <!-- Walkie-Talkie Body & Push-To-Talk Button -->
+          <div class="walkie-talkie-body">
+            <div class="speaker-grille">
+              <span class="grille-line"></span>
+              <span class="grille-line"></span>
+              <span class="grille-line"></span>
+              <span class="grille-line"></span>
+              <span class="grille-line"></span>
+            </div>
+
+            <!-- Big PTT Button Outer Shell -->
+            <div class="ptt-button-outer">
+              <button type="button" id="ptt-btn" class="ptt-button-inner">
+                <div class="ptt-glow"></div>
+                <div class="ptt-icon">
+                  <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                  </svg>
+                </div>
+                <span id="ptt-prompt" class="ptt-text">HOLD TO TALK</span>
+              </button>
+            </div>
+
+            <!-- PTT Lock Switch (Hands Free mode) -->
+            <div class="lock-control">
+              <span class="lock-label">Continuous stream (Lock mic)</span>
+              <label class="switch">
+                <input type="checkbox" id="mic-lock">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Peer list & Activity Log -->
+        <div class="info-section">
+          <!-- Users in Channel -->
+          <div class="info-card">
+            <h3>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+              ONLINE PEERS (<span id="peer-count">0</span>)
+            </h3>
+            <div class="peer-list-container">
+              <ul id="peer-list">
+                <!-- Peer items injected dynamically -->
+                <li class="empty-list-placeholder">No other operators in this channel</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Activity Log Console -->
+          <div class="info-card">
+            <h3>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+              </svg>
+              CHANNEL SYSTEM LOGS
+            </h3>
+            <div id="system-logs" class="console-logs">
+              <div class="log-entry system">[SYSTEM] Connecting to server...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Audio elements container (injected by client.js) -->
+  <div id="remote-audio-container"></div>
+
+  <!-- Socket.io library -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Client walkie talkie handler -->
+  <script src="client.js"></script>
+</body>
+</html>
