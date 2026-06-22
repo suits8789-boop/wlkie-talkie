@@ -1,0 +1,15 @@
+node_modules/
+certs/
+android/
+capacitor.config.json
+
+# Ignore build artifacts from flutter
+walkie_talkie_flutter/build/
+walkie_talkie_flutter/.dart_tool/
+walkie_talkie_flutter/.flutter-plugins
+walkie_talkie_flutter/.flutter-plugins-dependencies
+walkie_talkie_flutter/.pub-cache/
+walkie_talkie_flutter/.pub/
+walkie_talkie_flutter/android/app/debug
+walkie_talkie_flutter/android/app/profile
+walkie_talkie_flutter/android/app/release
